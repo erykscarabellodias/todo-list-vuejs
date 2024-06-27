@@ -21,7 +21,6 @@ import TodoSpinner from '@/components/TodoSpinner.vue'
 import TodoFormAdd from '@/components/TodoFormAdd.vue'
 import TodoItems from '@/components/TodoItems.vue'
 import TodoEmpty from '@/components/TodoEmpty.vue'
-import axios from 'axios'
 
 export default {
   name: 'App',
@@ -39,10 +38,9 @@ export default {
   },
 
   async created() {
-    this.loading = true
-    const todos = await axios.get('http://localhost:3000/todos');
+    this.loading = true;
 
-    this.$store.commit('storeTodos', todos.data)
+    await this.$store.dispatch('getTodos');
 
     this.loading = false;
   }
