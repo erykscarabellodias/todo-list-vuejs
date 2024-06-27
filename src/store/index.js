@@ -11,7 +11,13 @@ export default createStore({
     },
 
     storeTodo(state, todo) {
-      state.todos.push(todo)
+      const index = state.todos.findIndex(t => t.id === todo.id)
+
+      if(index >= 0) {
+        state.todos.splice(index, 1, todo)
+      } else {
+        state.todos.push(todo)
+      }
     }
   },
   getters: {
@@ -27,6 +33,12 @@ export default createStore({
     
     async addTodo(context, {title, completed}) {
       const { data } = await axios.post('http://localhost:3000/todos', { title, completed })
+
+      context.commit('storeTodo', data);
+    },
+
+    async updateTodo(context, {id, title, completed}) {
+      const {data} = await axios.put(`http://localhost:3000/todos/${id}`, { title, completed })
 
       context.commit('storeTodo', data);
     }
