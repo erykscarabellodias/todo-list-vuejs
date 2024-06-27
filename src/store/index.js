@@ -18,6 +18,12 @@ export default createStore({
       } else {
         state.todos.push(todo)
       }
+    },
+
+    deleteTodo(state, id) {
+      const index = state.todos.findIndex(t => t.id === id)
+
+      state.todos.splice(index, 1)
     }
   },
   getters: {
@@ -41,6 +47,12 @@ export default createStore({
       const {data} = await axios.put(`http://localhost:3000/todos/${id}`, { title, completed })
 
       context.commit('storeTodo', data);
+    },
+
+    async deleteTodo(context, id) {
+      await axios.delete(`http://localhost:3000/todos/${id}`)
+
+      this.commit('deleteTodo', id)
     }
   },
   modules: {
